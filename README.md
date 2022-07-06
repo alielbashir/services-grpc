@@ -1,6 +1,11 @@
 # services-grpc
 A demo for gRPC services automatically generated from proto files
 
+
+## Prerequisites
+- [Flutter](https://docs.flutter.dev/get-started/install)
+- Dart (automatically included with flutter install)
+
 ## Quickstart
 
 clone and enter the repo
