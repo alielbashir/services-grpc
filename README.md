@@ -24,7 +24,7 @@ dart run bin/server.dart
 
 ### Client terminal
 
-run the app (write windows or linux according to your OS)
+run the app (write `windows`, `linux`, or `macos` according to your OS)
 ```sh
 cd flutter_client
 flutter run -d windows
