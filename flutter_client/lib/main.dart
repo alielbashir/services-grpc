@@ -50,7 +50,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String message = "";
+  Stream<HelloReply> helloStream = const Stream.empty();
   final nameController = TextEditingController();
+  final streamingNameController = TextEditingController();
 
   void _fetchGreeting() async {
     // call say hello method from greeter service
@@ -61,6 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _fetchGreetingStream() async {
+    // call sayHelloStream method from greeter service
+
+    setState(() {
+      helloStream = widget.greeterStub
+          .sayHelloStream(HelloRequest(name: streamingNameController.text));
+      print("stream started");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,27 +80,63 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your name',
-              ),
+        child: Row(children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter your name for a single greeting',
+                  ),
+                ),
+                Text(
+                  message,
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                IconButton(
+                  onPressed: _fetchGreeting,
+                  tooltip: 'Fetch greeting',
+                  icon: const Icon(Icons.send),
+                ),
+              ],
             ),
-            Text(
-              message,
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextField(
+                  controller: streamingNameController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter your name for a stream of greetings',
+                  ),
+                ),
+                StreamBuilder<HelloReply>(
+                  stream: helloStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(
+                        snapshot.data!.message,
+                        style: Theme.of(context).textTheme.headline4,
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  },
+                ),
+                IconButton(
+                  onPressed: _fetchGreetingStream,
+                  tooltip: 'Fetch greeting stream',
+                  icon: const Icon(Icons.send_and_archive),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _fetchGreeting,
-        tooltip: 'Fetch greeting',
-        child: const Icon(Icons.send),
+          ),
+        ]),
       ),
     );
   }
