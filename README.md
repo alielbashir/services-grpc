@@ -19,6 +19,7 @@ cd services-grpc
 run the server
 ```sh
 cd dart_greeter
+dart pub get
 dart run bin/server.dart
 ```
 
@@ -27,6 +28,7 @@ dart run bin/server.dart
 run the app (write `windows`, `linux`, or `macos` according to your OS)
 ```sh
 cd flutter_client
+flutter pub get
 flutter run -d windows
 ```
 
