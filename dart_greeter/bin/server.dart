@@ -40,6 +40,16 @@ class GreeterService extends GreeterServiceBase {
     return HelloReply()
       ..message = 'Hello again, ${request.name}! My name is ${randomName()}';
   }
+
+  @override
+  Stream<HelloReply> sayHelloStream(
+      ServiceCall call, HelloRequest request) async* {
+    while (true) {
+      yield HelloReply()
+        ..message = 'Hello again, ${request.name}! My name is ${randomName()}';
+      await Future.delayed(Duration(seconds: 1));
+    }
+  }
 }
 
 Future<void> main(List<String> args) async {
